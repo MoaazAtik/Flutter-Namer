@@ -62,6 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
+
     Widget page;
     switch (selectedIndex) {
       case 0:
@@ -73,6 +75,16 @@ class _MyHomePageState extends State<MyHomePage> {
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
+
+    // The container for the current page, with its background color
+    // and subtle switching animation.
+    var mainArea = ColoredBox(
+      color: colorScheme.primaryContainer,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 200),
+        child: page,
+      ),
+    );
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -100,12 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                 ),
               ),
-              Expanded(
-                child: Container(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  child: page,
-                ),
-              ),
+              Expanded(child: mainArea),
             ],
           ),
         );
@@ -162,10 +169,7 @@ class GeneratorPage extends StatelessWidget {
 }
 
 class BigCard extends StatelessWidget {
-  const BigCard({
-    Key? key,
-    required this.pair,
-  }) : super(key: key);
+  const BigCard({Key? key, required this.pair}) : super(key: key);
 
   final WordPair pair;
 
@@ -196,7 +200,7 @@ class BigCard extends StatelessWidget {
                 Text(
                   pair.second,
                   style: style.copyWith(fontWeight: FontWeight.bold),
-                )
+                ),
               ],
             ),
           ),
